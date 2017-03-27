@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Yusuke Nakamura"]
   spec.email         = ["yusuke1994525@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{deploy and manage aws ecs}
+  spec.description   = %q{Mikoshi is a tool that deploy to ECS and manage task definition and cluster.}
+  spec.homepage      = "https://github.com/unasuke/mikoshi"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
