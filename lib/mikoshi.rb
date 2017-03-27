@@ -1,4 +1,4 @@
-require "mikoshi/version"
+require 'mikoshi/version'
 
 module Mikoshi
   # Your code goes here...
