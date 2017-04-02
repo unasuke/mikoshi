@@ -1,5 +1,5 @@
+require 'active_support/core_ext/hash/keys'
 require 'erb'
-require 'hashie'
 require 'yaml'
 
 module Mikoshi
@@ -10,7 +10,7 @@ module Mikoshi
       def initialize(yaml_path: nil, client: nil)
         raise ArgumentError, 'Yaml file path is required.' if yaml_path.nil?
 
-        @data = Hashie::Mash.new(YAML.safe_load(ERB.new(File.new(yaml_path).read).result))
+        @data = YAML.safe_load(ERB.new(File.new(yaml_path).read).result).symbolize_keys
         @client = client
       end
     end
