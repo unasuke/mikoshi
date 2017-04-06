@@ -4,10 +4,16 @@ require 'mikoshi/plan'
 module Mikoshi
   class Plan
     class Service < Base
+      TASK_DEFINITION_WITH_REVISION = %r!\A\S+:\d+\z!
+
       def initialize(yaml_path: nil, client: nil)
         super
 
         @data.store :service_name, @data[:service]
+
+        if @data[:task_definition].match(TASK_DEFINITION_WITH_REVISION).nil?
+          raise ArgumentError, 'task_definition should have revison by numerically.'
+        end
       end
 
       def create_service
