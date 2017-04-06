@@ -1,3 +1,4 @@
+require 'active_support/core_ext/hash/except'
 require 'mikoshi/plan'
 
 module Mikoshi
@@ -10,11 +11,11 @@ module Mikoshi
       end
 
       def create_service
-        @client.create_service(@data.delete(:service))
+        @client.create_service(@data.except(:service))
       end
 
       def update_service
-        @client.update_service(@data.delete(:service_name))
+        @client.update_service(@data.except(:service_name))
       end
     end
   end
