@@ -64,7 +64,7 @@ module Mikoshi
           if options[:region].nil?
             {}
           else
-            {region: options[:region]}
+            { region: options[:region] }
           end
 
         Aws::ECS::Client.new(opt)
