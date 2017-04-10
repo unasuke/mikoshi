@@ -54,13 +54,8 @@ module Mikoshi
     method_option :task_definition, type: :string, desc: 'task_definition name', aliases: '-t'
     method_option :service, type: :string, desc: 'service name', aliases: '-s'
     def deploy
-      unless options[:task_definition].nil?
-        update_task_definition(options[:task_definition])
-      end
-
-      unless options[:service].nil?
-        update_service(options[:service])
-      end
+      update_task_definition(options[:task_definition]) unless options[:task_definition].nil?
+      update_service(options[:service]) unless options[:service].nil?
     end
 
     no_tasks do
