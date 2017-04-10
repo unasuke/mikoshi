@@ -43,10 +43,10 @@ module Mikoshi
           end
         end
       rescue Timeout::Error
-        puts "Deploy failed by timeout(#{DEPLOY_TIMEOUT} sec)"
+        puts "Update failed by timeout(#{DEPLOY_TIMEOUT} sec)"
       end
 
-      puts "Deploy success"
+      puts "Update service success"
     end
 
     desc 'deploy TASK_NAME', 'Deploy task definition'
