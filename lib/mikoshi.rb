@@ -1,4 +1,5 @@
 require 'mikoshi/version'
+require 'mikoshi/cli'
 require 'mikoshi/manager'
 require 'mikoshi/plan'
 require 'mikoshi/plan/task_definition'
