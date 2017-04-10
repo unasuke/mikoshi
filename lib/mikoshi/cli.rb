@@ -30,13 +30,14 @@ module Mikoshi
 
     no_tasks do
       def aws_client
-        if ENV['AWS_REGION'].nil? && options[:region].nil?
-          raise ArgumentError, 'aws region is required'
-        end
-        region = ENV['AWS_REGION']
-        region = options[:region] unless options[:region].nil?
+        opt =
+          if options[:region].nil?
+            {}
+          else
+            {region: options[:region]}
+          end
 
-        Aws::ECS::Client.new(region: region)
+        Aws::ECS::Client.new(opt)
       end
     end
   end
