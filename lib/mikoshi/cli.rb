@@ -19,7 +19,7 @@ module Mikoshi
     def update_task_definition(task_name)
       task = ::Mikoshi::Plan::TaskDefinition.new(
         yaml_path:  File.join(TASK_DEFINITION_PATH, task_name + PLAN_EXT),
-        client:     aws_client
+        client:     aws_client,
       )
       puts "Update task definition: #{task_name}"
       task.register_task_definition
@@ -30,7 +30,7 @@ module Mikoshi
     def update_service(service_name)
       service = ::Mikoshi::Plan::Service.new(
         yaml_path:  File.join(SERVICE_PATH, service_name + PLAN_EXT),
-        client:     aws_client
+        client:     aws_client,
       )
       puts "Update service : #{service_name}"
       service.deploy_service
