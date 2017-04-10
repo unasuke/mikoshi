@@ -1,5 +1,10 @@
+notifications:
+  email: false
 sudo: false
 language: ruby
 rvm:
-  - 2.3.3
+  - 2.2.7
+  - 2.3.4
+  - 2.4.1
+  - ruby-head
 before_install: gem install bundler -v 1.14.3
