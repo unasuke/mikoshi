@@ -44,6 +44,7 @@ module Mikoshi
         end
       rescue Timeout::Error
         puts "Update failed by timeout(#{DEPLOY_TIMEOUT} sec)"
+        exit(false)
       end
 
       puts "Update service success"
