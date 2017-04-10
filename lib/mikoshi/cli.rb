@@ -47,7 +47,7 @@ module Mikoshi
         exit(false)
       end
 
-      puts "Update service success"
+      puts "Done update service #{service_name}"
     end
 
     desc 'deploy', 'Deploy task definition and service'
