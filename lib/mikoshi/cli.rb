@@ -13,7 +13,7 @@ module Mikoshi
     class_option :region, type: :string, desc: 'aws region'
 
     desc 'update_task TASK_NAME', 'Update task definition'
-    def update_task(task_name)
+    def update_task_definition(task_name)
       task = ::Mikoshi::Plan::TaskDefinition.new(
         yaml_path:  File.join(TASK_DEFINITION_PATH, task_name + PLAN_EXT),
         client:     aws_client
