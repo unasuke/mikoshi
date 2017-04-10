@@ -32,6 +32,19 @@ module Mikoshi
           create_service
         end
       end
+
+      def deployed?
+        resp = @client.describe_services(cluster: @data[:cluster], services: [@data[:service]])
+        deployment = resp.services.first.deployments.find do |d|
+          d.task_definition.end_with?(@data[:task_definition])
+        end
+
+        if deployment.running_count == @data[:desired_count]
+          true
+        else
+          false
+        end
+      end
     end
   end
 end
