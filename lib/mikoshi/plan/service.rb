@@ -4,7 +4,7 @@ require 'mikoshi/plan'
 module Mikoshi
   class Plan
     class Service < Base
-      TASK_DEFINITION_WITH_REVISION = %r!\A\S+:\d+\z!
+      TASK_DEFINITION_WITH_REVISION = %r{\A\S+:\d+\z}
 
       def initialize(yaml_path: nil, client: nil)
         super
