@@ -9,11 +9,11 @@ module Mikoshi
       def initialize(yaml_path: nil, client: nil)
         super
 
-        @data.store :service_name, @data[:service]
-
         if @data[:task_definition].match(TASK_DEFINITION_WITH_REVISION).nil?
           raise ArgumentError, 'task_definition should have revison by numerically.'
         end
+
+        @data.store :service_name, @data[:service]
       end
 
       def create_service
