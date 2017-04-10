@@ -23,6 +23,15 @@ module Mikoshi
       def update_service
         @client.update_service(@data.except(:service_name))
       end
+
+      def deploy_service
+        resp = @client.describe_services(cluster: @data[:cluster], services: [@data[:service]])
+        if resp.services.first.status == "ACTIVE"
+          update_service
+        else
+          create_service
+        end
+      end
     end
   end
 end
