@@ -50,9 +50,17 @@ module Mikoshi
       puts "Update service success"
     end
 
-    desc 'deploy TASK_NAME', 'Deploy task definition'
-    def deploy(task_name)
-      puts task_name
+    desc 'deploy TASK_NAME', 'Deploy task definition and service'
+    method_option :task_definition, type: :string, desc: 'task_definition name', aliases: '-t'
+    method_option :service, type: :string, desc: 'service name', aliases: '-s'
+    def deploy
+      if !options[:task_definition].nil?
+        update_task_definition(options[:task_definition])
+      end
+
+      if !options[:service].nil?
+        update_service(options[:service])
+      end
     end
 
     no_tasks do
