@@ -1,4 +1,5 @@
 # Mikoshi
+[![Build Status](https://travis-ci.org/unasuke/mikoshi.svg?branch=master)](https://travis-ci.org/unasuke/mikoshi)
 
 This gem is tool to deploy ECS task definition and service with described by yaml documents.
 
