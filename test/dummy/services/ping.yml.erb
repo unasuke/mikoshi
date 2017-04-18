@@ -1,0 +1,4 @@
+cluster: "ping"
+service: "ping"
+task_definition: <%= "\"ping:#{ENV['TASK_REVISION']}\"" %>
+desired_count: 1

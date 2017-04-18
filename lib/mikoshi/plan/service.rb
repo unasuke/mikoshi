@@ -26,10 +26,12 @@ module Mikoshi
 
       def deploy_service
         resp = @client.describe_services(cluster: @data[:cluster], services: [@data[:service]])
-        if resp.services.first.status == 'ACTIVE'
+        if resp.services.empty? && resp.failures.first.reason == 'MISSING'
+          create_service
+        elsif resp.services.first.status == 'ACTIVE'
           update_service
         else
-          create_service
+          false
         end
       end
 
