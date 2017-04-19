@@ -9,7 +9,7 @@ Aws.config[:ecs] = {
       failures: [
         arn: 'arn:aws:ecs:ap-northeast-1:012345678910:service/ping',
         reason: 'MISSING',
-      ]
+      ],
     },
     create_service: {
       service: {
