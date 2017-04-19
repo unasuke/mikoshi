@@ -8,3 +8,5 @@ Style/RegexpLiteral:
   EnforcedStyle: percent_r
 Style/FrozenStringLiteralComment:
   Enabled: false
+Metrics/AbcSize:
+  Max: 20
