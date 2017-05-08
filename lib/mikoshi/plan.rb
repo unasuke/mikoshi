@@ -11,7 +11,7 @@ module Mikoshi
         raise ArgumentError, 'Yaml file path is required.' if yaml_path.nil?
         raise ArgumentError, 'client is required.' if client.nil?
 
-        @data = YAML.safe_load(ERB.new(File.new(yaml_path).read).result).symbolize_keys
+        @data = YAML.safe_load(ERB.new(File.new(yaml_path).read).result).deep_symbolize_keys
         @client = client
       end
     end
