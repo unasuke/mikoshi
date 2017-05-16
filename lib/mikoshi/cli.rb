@@ -23,7 +23,7 @@ module Mikoshi
       )
       puts "Update task definition: #{task_name}"
       task.register_task_definition
-      puts "Done update task definition: #{task_name} revison: #{ENV['TASK_DEF_REVISION']}"
+      puts "Done update task definition: #{task_name} revision: #{ENV['TASK_DEF_REVISION']}"
     end
 
     desc 'update_service SERVICE_NAME', 'Update service'

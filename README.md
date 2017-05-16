@@ -49,7 +49,7 @@ Then, invoke those commands.
 # update task_definition
 $ mikoshi update_task ping2googledns --region ap-northeast-1
 Update task definition: ping2googledns
-Done update task definition: ping2googledns revison: 6
+Done update task definition: ping2googledns revision: 6
 
 # update service
 $ TASK_REVISION=3 mikoshi update_service ping2googledns
@@ -60,7 +60,7 @@ Update service success
 # update task_definition and service
 $ mikoshi deploy -t ping2googledns -s ping2googledns
 Update task definition: ping2googledns
-Done update task definition: ping2googledns revison: 7
+Done update task definition: ping2googledns revision: 7
 Update service : ping2googledns
 Waiting for 10 sec...
 Waiting for 10 sec...
