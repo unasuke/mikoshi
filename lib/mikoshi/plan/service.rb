@@ -9,23 +9,23 @@ module Mikoshi
       def initialize(yaml_path: nil, client: nil)
         super
 
-        if @data[:task_definition].match(TASK_DEFINITION_WITH_REVISION).nil?
+        if @data[:service][:task_definition].match(TASK_DEFINITION_WITH_REVISION).nil?
           raise ArgumentError, 'task_definition should have revision by numerically.'
         end
 
-        @data.store :service_name, @data[:service]
+        @data[:service].store :service_name, @data[:service][:service]
       end
 
       def create_service
-        @client.create_service(@data.except(:service))
+        @client.create_service(@data[:service].except(:service))
       end
 
       def update_service
-        @client.update_service(@data.except(:service_name))
+        @client.update_service(@data[:service].except(:service_name))
       end
 
       def deploy_service
-        resp = @client.describe_services(cluster: @data[:cluster], services: [@data[:service]])
+        resp = @client.describe_services(cluster: @data[:service][:cluster], services: [@data[:service][:service]])
         if resp.services.empty? || resp.services.first.status == 'INACTIVE'
           create_service
         else
@@ -34,12 +34,12 @@ module Mikoshi
       end
 
       def deployed?
-        resp = @client.describe_services(cluster: @data[:cluster], services: [@data[:service]])
+        resp = @client.describe_services(cluster: @data[:service][:cluster], services: [@data[:service][:service]])
         deployment = resp.services.first.deployments.find do |d|
-          d.task_definition.end_with?(@data[:task_definition])
+          d.task_definition.end_with?(@data[:service][:task_definition])
         end
 
-        if deployment.running_count == @data[:desired_count]
+        if deployment.running_count == @data[:service][:desired_count]
           true
         else
           false

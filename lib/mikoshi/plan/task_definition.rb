@@ -8,7 +8,7 @@ module Mikoshi
       end
 
       def register_task_definition
-        resp = @client.register_task_definition(@data)
+        resp = @client.register_task_definition(@data[:task_definition])
         ENV['TASK_DEF_REVISION'] = resp.task_definition.revision.to_s
         resp
       end

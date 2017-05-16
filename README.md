@@ -24,23 +24,25 @@ First, describe task definition to yaml.
 
 ```yaml
 # task_definitions/ping2googledns.yml.erb
-family: "ping2googledns"
-network_mode: "bridge"
-container_definitions:
-  - name: "ping"
-    image: "unasuke/ping2googledns:latest"
-    cpu: 128
-    memory: 128
+task_definition:
+  family: "ping2googledns"
+  network_mode: "bridge"
+  container_definitions:
+    - name: "ping"
+      image: "unasuke/ping2googledns:latest"
+      cpu: 128
+      memory: 128
 ```
 
 ... and service too.
 
 ```yaml
 # services/ping2googledns.yml.erb
-cluster: "default"
-service: "ping2googledns"
-task_definition: <%= "ping2googledns:#{ENV['TASK_REVISION']}" %>
-desired_count: 1
+service:
+  cluster: "default"
+  service: "ping2googledns"
+  task_definition: <%= "ping2googledns:#{ENV['TASK_REVISION']}" %>
+  desired_count: 1
 ```
 
 Then, invoke those commands.
