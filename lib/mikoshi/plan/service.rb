@@ -10,7 +10,7 @@ module Mikoshi
         super
 
         if @data[:task_definition].match(TASK_DEFINITION_WITH_REVISION).nil?
-          raise ArgumentError, 'task_definition should have revison by numerically.'
+          raise ArgumentError, 'task_definition should have revision by numerically.'
         end
 
         @data.store :service_name, @data[:service]
