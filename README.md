@@ -54,7 +54,7 @@ Update task definition: ping2googledns
 Done update task definition: ping2googledns revision: 6
 
 # update service
-$ TASK_REVISION=3 mikoshi update_service ping2googledns
+$ TASK_DEF_REVISION=3 mikoshi update_service ping2googledns
 Update service : ping2googledns
 Waiting for 10 sec...
 Update service success
