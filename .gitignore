@@ -7,3 +7,6 @@
 /pkg/
 /spec/reports/
 /tmp/
+task_definitions/
+services/
+.ruby-version
