@@ -1,5 +1,6 @@
 # Mikoshi
 [![Build Status](https://travis-ci.org/unasuke/mikoshi.svg?branch=master)](https://travis-ci.org/unasuke/mikoshi)
+[![codecov](https://codecov.io/gh/unasuke/mikoshi/branch/master/graph/badge.svg)](https://codecov.io/gh/unasuke/mikoshi)
 
 This gem is tool to deploy ECS task definition and service with described by yaml documents.
 
@@ -32,6 +33,9 @@ task_definition:
       image: "unasuke/ping2googledns:latest"
       cpu: 128
       memory: 128
+hooks:
+  after_register:
+    - echo registerd
 ```
 
 ... and service too.
@@ -41,8 +45,12 @@ task_definition:
 service:
   cluster: "default"
   service: "ping2googledns"
-  task_definition: <%= "ping2googledns:#{ENV['TASK_REVISION']}" %>
+  task_definition: <%= "ping2googledns:#{ENV['TASK_DEF_REVISION']}" %>
   desired_count: 1
+hooks:
+  before_update:
+    - echo some shell command
+    - echo shell command another one
 ```
 
 Then, invoke those commands.
