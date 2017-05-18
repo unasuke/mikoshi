@@ -30,7 +30,7 @@ module Mikoshi
         @client.update_service(@data[:service].except(:service_name))
       end
 
-      def deploy_service
+      def deploy_service(message: false)
         case operation
         when :create
           create_service
@@ -41,6 +41,10 @@ module Mikoshi
         @client.wait_until(:services_stable, cluster: @data[:service][:cluster], services: [@data[:service][:service]]) do |w|
           w.max_attempts = 30
           w.delay        = 10
+
+          w.before_wait do
+            puts 'Waiting to change status of service...' if message
+          end
         end
 
         case operation

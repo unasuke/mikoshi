@@ -34,7 +34,7 @@ module Mikoshi
         client:     aws_client,
       )
       puts "Update service : #{service_name}"
-      service.deploy_service
+      service.deploy_service(message: true)
       puts "Done update service #{service_name}"
     end
 
