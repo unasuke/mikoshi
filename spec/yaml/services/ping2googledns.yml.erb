@@ -1,0 +1,14 @@
+service:
+  cluster: "default"
+  service: "ping2googledns"
+  task_definition: <%= "ping2googledns:#{ENV['TASK_DEF_REVISION']}" %>
+  desired_count: 0
+hooks:
+  before_create:
+    - echo before create
+  after_create:
+    - echo after create
+  before_update:
+    - echo before update
+  after_update:
+    - echo after update

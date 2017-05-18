@@ -6,3 +6,8 @@ Style/Documentation:
   Enabled: false
 Style/RegexpLiteral:
   EnforcedStyle: percent_r
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'mikoshi.gemspec'

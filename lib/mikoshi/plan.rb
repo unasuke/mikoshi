@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/hash/keys'
 require 'erb'
 require 'yaml'
@@ -13,6 +15,12 @@ module Mikoshi
 
         @data = YAML.safe_load(ERB.new(File.new(yaml_path).read).result).deep_symbolize_keys
         @client = client
+      end
+
+      def invoke_hooks(hooks)
+        hooks.each do |hook|
+          system hook
+        end
       end
     end
   end

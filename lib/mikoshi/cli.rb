@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 require 'thor'
 require 'aws-sdk'
-require 'timeout'
 require 'mikoshi/plan'
 require 'mikoshi/plan/task_definition'
 require 'mikoshi/plan/service'
 
 module Mikoshi
   class Cli < Thor
-    TASK_DEFINITION_PATH = 'task_definitions'.freeze
-    SERVICE_PATH = 'services'.freeze
-    PLAN_EXT = '.yml.erb'.freeze
+    TASK_DEFINITION_PATH = 'task_definitions'
+    SERVICE_PATH = 'services'
+    PLAN_EXT = '.yml.erb'
     FETCH_INTERVAL = 10
     DEPLOY_TIMEOUT = 300
 
@@ -33,20 +34,7 @@ module Mikoshi
         client:     aws_client,
       )
       puts "Update service : #{service_name}"
-      service.deploy_service
-      begin
-        Timeout.timeout(DEPLOY_TIMEOUT) do
-          loop do
-            puts "Waiting for #{FETCH_INTERVAL} sec..."
-            sleep FETCH_INTERVAL
-            break if service.deployed?
-          end
-        end
-      rescue Timeout::Error
-        puts "Update failed by timeout(#{DEPLOY_TIMEOUT} sec)"
-        exit(false)
-      end
-
+      service.deploy_service(message: true)
       puts "Done update service #{service_name}"
     end
 

@@ -1,5 +1,6 @@
 # Mikoshi
 [![Build Status](https://travis-ci.org/unasuke/mikoshi.svg?branch=master)](https://travis-ci.org/unasuke/mikoshi)
+[![codecov](https://codecov.io/gh/unasuke/mikoshi/branch/master/graph/badge.svg)](https://codecov.io/gh/unasuke/mikoshi)
 
 This gem is tool to deploy ECS task definition and service with described by yaml documents.
 
@@ -24,23 +25,32 @@ First, describe task definition to yaml.
 
 ```yaml
 # task_definitions/ping2googledns.yml.erb
-family: "ping2googledns"
-network_mode: "bridge"
-container_definitions:
-  - name: "ping"
-    image: "unasuke/ping2googledns:latest"
-    cpu: 128
-    memory: 128
+task_definition:
+  family: "ping2googledns"
+  network_mode: "bridge"
+  container_definitions:
+    - name: "ping"
+      image: "unasuke/ping2googledns:latest"
+      cpu: 128
+      memory: 128
+hooks:
+  after_register:
+    - echo registerd
 ```
 
 ... and service too.
 
 ```yaml
 # services/ping2googledns.yml.erb
-cluster: "default"
-service: "ping2googledns"
-task_definition: <%= "ping2googledns:#{ENV['TASK_REVISION']}" %>
-desired_count: 1
+service:
+  cluster: "default"
+  service: "ping2googledns"
+  task_definition: <%= "ping2googledns:#{ENV['TASK_DEF_REVISION']}" %>
+  desired_count: 1
+hooks:
+  before_update:
+    - echo some shell command
+    - echo shell command another one
 ```
 
 Then, invoke those commands.
@@ -52,7 +62,7 @@ Update task definition: ping2googledns
 Done update task definition: ping2googledns revision: 6
 
 # update service
-$ TASK_REVISION=3 mikoshi update_service ping2googledns
+$ TASK_DEF_REVISION=3 mikoshi update_service ping2googledns
 Update service : ping2googledns
 Waiting for 10 sec...
 Update service success

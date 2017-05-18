@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/hash/except'
 require 'mikoshi/plan'
 
@@ -9,40 +11,72 @@ module Mikoshi
       def initialize(yaml_path: nil, client: nil)
         super
 
-        if @data[:task_definition].match(TASK_DEFINITION_WITH_REVISION).nil?
+        if @data[:service][:task_definition].match(TASK_DEFINITION_WITH_REVISION).nil?
           raise ArgumentError, 'task_definition should have revision by numerically.'
         end
 
-        @data.store :service_name, @data[:service]
+        @data[:service].store :service_name, @data[:service][:service]
       end
 
       def create_service
-        @client.create_service(@data.except(:service))
+        invoke_before_create_hooks
+
+        @client.create_service(@data[:service].except(:service))
       end
 
       def update_service
-        @client.update_service(@data.except(:service_name))
+        invoke_before_update_hooks
+
+        @client.update_service(@data[:service].except(:service_name))
       end
 
-      def deploy_service
-        resp = @client.describe_services(cluster: @data[:cluster], services: [@data[:service]])
-        if resp.services.empty? || resp.services.first.status == 'INACTIVE'
+      def deploy_service(message: false)
+        case operation
+        when :create
           create_service
-        else
+        when :update
           update_service
         end
-      end
 
-      def deployed?
-        resp = @client.describe_services(cluster: @data[:cluster], services: [@data[:service]])
-        deployment = resp.services.first.deployments.find do |d|
-          d.task_definition.end_with?(@data[:task_definition])
+        @client.wait_until(:services_stable, cluster: @data[:service][:cluster], services: [@data[:service][:service]]) do |w|
+          w.max_attempts = 30
+          w.delay        = 10
+
+          w.before_wait do
+            puts 'Waiting to change status of service...' if message
+          end
         end
 
-        if deployment.running_count == @data[:desired_count]
-          true
+        case operation
+        when :create
+          invoke_after_create_hooks
+        when :update
+          invoke_after_update_hooks
+        end
+      end
+
+      private
+
+      def operation
+        if @operation
+          @operation
         else
-          false
+          resp = @client.describe_services(cluster: @data[:service][:cluster], services: [@data[:service][:service]])
+
+          @operation ||=
+            if resp.services.empty? || resp.services.first.status == 'INACTIVE'
+              :create
+            else
+              :update
+            end
+        end
+      end
+
+      %w[before after].each do |step|
+        %w[create update].each do |func|
+          define_method "invoke_#{step}_#{func}_hooks" do
+            invoke_hooks @data[:hooks]["#{step}_#{func}".to_sym] unless @data.dig(:hooks, "#{step}_#{func}".to_sym).nil?
+          end
         end
       end
     end

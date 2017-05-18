@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mikoshi/version'
 require 'mikoshi/cli'
 require 'mikoshi/plan'
