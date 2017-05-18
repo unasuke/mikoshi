@@ -1,0 +1,13 @@
+task_definition:
+  family: "ping2googledns"
+  network_mode: "bridge"
+  container_definitions:
+    - name: "ping"
+      image: "unasuke/ping2googledns:latest"
+      cpu: 64
+      memory: 64
+hooks:
+  before_register:
+    - echo before register
+  after_register:
+    - echo after register
