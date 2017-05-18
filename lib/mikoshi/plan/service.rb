@@ -60,20 +60,12 @@ module Mikoshi
 
       private
 
-      def invoke_before_create_hooks
-        invoke_hooks @data[:hooks][:before_create] unless @data.dig(:hooks, :before_create).nil?
-      end
-
-      def invoke_after_create_hooks
-        invoke_hooks @data[:hooks][:after_create] unless @data.dig(:hooks, :after_create).nil?
-      end
-
-      def invoke_before_update_hooks
-        invoke_hooks @data[:hooks][:before_update] unless @data.dig(:hooks, :before_update).nil?
-      end
-
-      def invoke_after_update_hooks
-        invoke_hooks @data[:hooks][:after_update] unless @data.dig(:hooks, :after_update).nil?
+      %w[before after].each do |step|
+        %w[create update].each do |func|
+          define_method "invoke_#{step}_#{func}_hooks" do
+            invoke_hooks @data[:hooks]["#{step}_#{func}".to_sym] unless @data.dig(:hooks, "#{step}_#{func}".to_sym).nil?
+          end
+        end
       end
     end
   end

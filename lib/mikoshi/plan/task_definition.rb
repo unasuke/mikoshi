@@ -20,12 +20,10 @@ module Mikoshi
 
       private
 
-      def invoke_before_register_hooks
-        invoke_hooks @data[:hooks][:before_register] unless @data.dig(:hooks, :before_register).nil?
-      end
-
-      def invoke_after_register_hooks
-        invoke_hooks @data[:hooks][:after_register] unless @data.dig(:hooks, :after_register).nil?
+      %w[before after].each do |step|
+        define_method "invoke_#{step}_register_hooks" do
+          invoke_hooks @data[:hooks]["#{step}_register".to_sym] unless @data.dig(:hooks, "#{step}_register".to_sym).nil?
+        end
       end
     end
   end
