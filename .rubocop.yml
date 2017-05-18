@@ -10,3 +10,4 @@ Style/RegexpLiteral:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*_spec.rb'
+    - 'mikoshi.gemspec'
