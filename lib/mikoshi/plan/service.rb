@@ -17,11 +17,23 @@ module Mikoshi
       end
 
       def create_service
-        @client.create_service(@data[:service].except(:service))
+        invoke_before_create_hooks
+
+        resp = @client.create_service(@data[:service].except(:service))
+
+        invoke_after_create_hooks
+
+        resp
       end
 
       def update_service
-        @client.update_service(@data[:service].except(:service_name))
+        invoke_before_update_hooks
+
+        reps = @client.update_service(@data[:service].except(:service_name))
+
+        invoke_after_update_hooks
+
+        resp
       end
 
       def deploy_service
@@ -44,6 +56,24 @@ module Mikoshi
         else
           false
         end
+      end
+
+      private
+
+      def invoke_before_create_hooks
+        invoke_hooks @data[:hooks][:before_create] unless @data.dig(:hooks, :before_create).nil?
+      end
+
+      def invoke_after_create_hooks
+        invoke_hooks @data[:hooks][:after_create] unless @data.dig(:hooks, :after_create).nil?
+      end
+
+      def invoke_before_update_hooks
+        invoke_hooks @data[:hooks][:before_update] unless @data.dig(:hooks, :before_update).nil?
+      end
+
+      def invoke_after_update_hooks
+        invoke_hooks @data[:hooks][:after_update] unless @data.dig(:hooks, :after_update).nil?
       end
     end
   end
