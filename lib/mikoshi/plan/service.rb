@@ -20,45 +20,51 @@ module Mikoshi
         invoke_before_create_hooks
 
         resp = @client.create_service(@data[:service].except(:service))
-
-        invoke_after_create_hooks
-
-        resp
       end
 
       def update_service
         invoke_before_update_hooks
 
-        reps = @client.update_service(@data[:service].except(:service_name))
-
-        invoke_after_update_hooks
-
-        resp
+        resp = @client.update_service(@data[:service].except(:service_name))
       end
 
       def deploy_service
-        resp = @client.describe_services(cluster: @data[:service][:cluster], services: [@data[:service][:service]])
-        if resp.services.empty? || resp.services.first.status == 'INACTIVE'
+        case operation
+        when :create
           create_service
-        else
+        when :update
           update_service
         end
-      end
 
-      def deployed?
-        resp = @client.describe_services(cluster: @data[:service][:cluster], services: [@data[:service][:service]])
-        deployment = resp.services.first.deployments.find do |d|
-          d.task_definition.end_with?(@data[:service][:task_definition])
+        @client.wait_until(:services_stable, cluster: @data[:service][:cluster], services: [@data[:service][:service]]) do |w|
+          w.max_attempts = 30
+          w.delay        = 10
         end
 
-        if deployment.running_count == @data[:service][:desired_count]
-          true
-        else
-          false
+        case operation
+        when :create
+          invoke_after_create_hooks
+        when :update
+          invoke_after_update_hooks
         end
       end
 
       private
+
+      def operation
+        if @operation
+          @operation
+        else
+          resp = @client.describe_services(cluster: @data[:service][:cluster], services: [@data[:service][:service]])
+
+          @operation ||=
+            if resp.services.empty? || resp.services.first.status == 'INACTIVE'
+              :create
+            else
+              :update
+            end
+        end
+      end
 
       %w[before after].each do |step|
         %w[create update].each do |func|
