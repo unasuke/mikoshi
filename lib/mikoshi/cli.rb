@@ -1,6 +1,5 @@
 require 'thor'
 require 'aws-sdk'
-require 'timeout'
 require 'mikoshi/plan'
 require 'mikoshi/plan/task_definition'
 require 'mikoshi/plan/service'
@@ -34,19 +33,6 @@ module Mikoshi
       )
       puts "Update service : #{service_name}"
       service.deploy_service
-      begin
-        Timeout.timeout(DEPLOY_TIMEOUT) do
-          loop do
-            puts "Waiting for #{FETCH_INTERVAL} sec..."
-            sleep FETCH_INTERVAL
-            break if service.deployed?
-          end
-        end
-      rescue Timeout::Error
-        puts "Update failed by timeout(#{DEPLOY_TIMEOUT} sec)"
-        exit(false)
-      end
-
       puts "Done update service #{service_name}"
     end
 
