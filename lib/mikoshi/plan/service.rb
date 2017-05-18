@@ -21,13 +21,13 @@ module Mikoshi
       def create_service
         invoke_before_create_hooks
 
-        resp = @client.create_service(@data[:service].except(:service))
+        @client.create_service(@data[:service].except(:service))
       end
 
       def update_service
         invoke_before_update_hooks
 
-        resp = @client.update_service(@data[:service].except(:service_name))
+        @client.update_service(@data[:service].except(:service_name))
       end
 
       def deploy_service
