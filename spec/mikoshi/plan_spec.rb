@@ -32,13 +32,24 @@ RSpec.describe 'Mikoshi::Plan::Base' do
     end
   end
 
-  context '#invoke_hooks' do
+  describe '#invoke_hooks' do
     let(:client) { Aws::ECS::Client.new(stub_responses: true) }
     let(:plan) do
       Mikoshi::Plan::Base.new(yaml_path: 'spec/yaml/task_definitions/ping2googledns.yml.erb', client: client)
     end
-    let(:commands) { ['echo hello'] }
 
-    it { expect { plan.invoke_hooks(commands) }.to output("hello\n").to_stdout_from_any_process }
+    subject do
+      -> { plan.invoke_hooks(commands) }
+    end
+
+    context 'when hook execution succeeds' do
+      let(:commands) { ['echo hello'] }
+      it { is_expected.to output("hello\n").to_stdout_from_any_process }
+    end
+
+    context 'when hook execution fails' do
+      let(:commands) { ['false'] }
+      it { is_expected.to raise_error Mikoshi::HookExecutionError }
+    end
   end
 end

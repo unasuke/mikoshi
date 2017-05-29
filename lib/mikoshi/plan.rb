@@ -5,6 +5,8 @@ require 'erb'
 require 'yaml'
 
 module Mikoshi
+  HookExecutionError = Class.new(StandardError)
+
   class Plan
     class Base
       attr_reader :data, :client
@@ -19,7 +21,7 @@ module Mikoshi
 
       def invoke_hooks(hooks)
         hooks.each do |hook|
-          system hook
+          raise(HookExecutionError, hook) unless system(hook)
         end
       end
     end
