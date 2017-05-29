@@ -3,6 +3,11 @@ service:
   service: "ping2googledns"
   task_definition: <%= "ping2googledns:#{ENV['TASK_DEF_REVISION']}" %>
   desired_count: 0
+  placement_strategy:
+    - type: "spread"
+      field: "attribute:ecs.availability-zone"
+  placement_constraints:
+    - type: "distinctInstance"
 hooks:
   before_create:
     - echo before create

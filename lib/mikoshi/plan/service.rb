@@ -27,7 +27,7 @@ module Mikoshi
       def update_service
         invoke_before_update_hooks
 
-        @client.update_service(@data[:service].except(:service_name))
+        @client.update_service(@data[:service].except(:service_name, :placement_strategy, :placement_constraints))
       end
 
       def deploy_service(message: false)
