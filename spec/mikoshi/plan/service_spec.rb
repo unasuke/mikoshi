@@ -45,7 +45,10 @@ RSpec.describe 'Mikoshi::Plan::Service' do
       )
     end
 
-    it { expect { service.create_service }.to output("before create\n").to_stdout_from_any_process }
+    it do
+      expect { service.create_service }.
+        to output("before create\nafter create\n").to_stdout_from_any_process
+    end
   end
 
   context '#update_service' do
@@ -58,7 +61,10 @@ RSpec.describe 'Mikoshi::Plan::Service' do
       )
     end
 
-    it { expect { service.update_service }.to output("before update\n").to_stdout_from_any_process }
+    it do
+      expect { service.update_service }.
+        to output("before update\nafter update\n").to_stdout_from_any_process
+    end
   end
 
   context '#deploy_service' do

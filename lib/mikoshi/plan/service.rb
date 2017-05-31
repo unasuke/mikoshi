@@ -22,36 +22,28 @@ module Mikoshi
         invoke_before_create_hooks
 
         @client.create_service(@data[:service].except(:service))
+        wait_until_services_stable
+
+        invoke_after_create_hooks
       end
 
       def update_service
         invoke_before_update_hooks
 
         @client.update_service(@data[:service].except(:service_name, :placement_strategy, :placement_constraints))
+        wait_until_services_stable
+
+        invoke_after_update_hooks
       end
 
       def deploy_service(message: false)
+        @message = message
+
         case operation
         when :create
           create_service
         when :update
           update_service
-        end
-
-        @client.wait_until(:services_stable, cluster: @data[:service][:cluster], services: [@data[:service][:service]]) do |w|
-          w.max_attempts = 30
-          w.delay        = 10
-
-          w.before_wait do
-            puts 'Waiting to change status of service...' if message
-          end
-        end
-
-        case operation
-        when :create
-          invoke_after_create_hooks
-        when :update
-          invoke_after_update_hooks
         end
       rescue => e
         invoke_failed_hooks
@@ -72,6 +64,19 @@ module Mikoshi
             else
               :update
             end
+        end
+      end
+
+      def wait_until_services_stable
+        params = { cluster: @data[:service][:cluster], services: [@data[:service][:service]] }
+
+        @client.wait_until(:services_stable, params) do |w|
+          w.max_attempts = 30
+          w.delay        = 10
+
+          w.before_wait do
+            puts 'Waiting to change status of service...' if @message
+          end
         end
       end
 
