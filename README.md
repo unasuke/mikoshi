@@ -1,6 +1,9 @@
 # Mikoshi
 [![Build Status](https://travis-ci.org/unasuke/mikoshi.svg?branch=master)](https://travis-ci.org/unasuke/mikoshi)
-[![codecov](https://codecov.io/gh/unasuke/mikoshi/branch/master/graph/badge.svg)](https://codecov.io/gh/unasuke/mikoshi)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/71ceb38e09ab4a319e54a2964725f16a)](https://www.codacy.com/app/unasuke/mikoshi?utm_source=github.com&utm_medium=referral&utm_content=unasuke/mikoshi&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/71ceb38e09ab4a319e54a2964725f16a)](https://www.codacy.com/app/unasuke/mikoshi?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=unasuke/mikoshi&amp;utm_campaign=Badge_Grade)
+[![Gem downloads](https://img.shields.io/gem/dtv/mikoshi.svg)]()
+[![Gem version](https://img.shields.io/gem/v/mikoshi.svg)]()
 
 This gem is tool to deploy ECS task definition and service with described by yaml documents.
 
