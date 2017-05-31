@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'aws-sdk'
-require 'simplecov'
+require 'codacy-coverage'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -15,9 +15,4 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 end
 
-SimpleCov.start
-
-if ENV['CI']
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-end
+Codacy::Reporter.start
