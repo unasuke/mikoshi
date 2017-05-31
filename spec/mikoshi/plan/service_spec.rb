@@ -108,5 +108,21 @@ RSpec.describe 'Mikoshi::Plan::Service' do
         expect { service.deploy_service }.to output("before update\nafter update\n").to_stdout_from_any_process
       end
     end
+
+    context 'when a deployment fails' do
+      let(:client) do
+        Aws::ECS::Client.new(
+          stub_responses: {
+            describe_services: { services: [] },
+            create_service: StandardError,
+          },
+        )
+      end
+      it do
+        expect { service.deploy_service }.
+          to  raise_error(StandardError).
+          and output("before create\nfailed\n").to_stdout_from_any_process
+      end
+    end
   end
 end

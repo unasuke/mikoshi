@@ -53,6 +53,9 @@ module Mikoshi
         when :update
           invoke_after_update_hooks
         end
+      rescue => e
+        invoke_failed_hooks
+        raise e
       end
 
       private
@@ -78,6 +81,9 @@ module Mikoshi
             invoke_hooks @data[:hooks]["#{step}_#{func}".to_sym] unless @data.dig(:hooks, "#{step}_#{func}".to_sym).nil?
           end
         end
+      end
+      def invoke_failed_hooks
+        invoke_hooks(@data[:hooks][:failed]) unless @data.dig(:hooks, :failed).nil?
       end
     end
   end
