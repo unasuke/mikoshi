@@ -18,6 +18,9 @@ module Mikoshi
         invoke_after_register_hooks
 
         resp
+      rescue => e
+        invoke_failed_hooks
+        raise e
       end
 
       private
@@ -26,6 +29,9 @@ module Mikoshi
         define_method "invoke_#{step}_register_hooks" do
           invoke_hooks @data[:hooks]["#{step}_register".to_sym] unless @data.dig(:hooks, "#{step}_register".to_sym).nil?
         end
+      end
+      def invoke_failed_hooks
+        invoke_hooks(@data[:hooks][:failed]) unless @data.dig(:hooks, :failed).nil?
       end
     end
   end

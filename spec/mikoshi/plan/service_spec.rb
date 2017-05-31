@@ -45,7 +45,10 @@ RSpec.describe 'Mikoshi::Plan::Service' do
       )
     end
 
-    it { expect { service.create_service }.to output("before create\n").to_stdout_from_any_process }
+    it do
+      expect { service.create_service }.
+        to output("before create\nafter create\n").to_stdout_from_any_process
+    end
   end
 
   context '#update_service' do
@@ -58,7 +61,10 @@ RSpec.describe 'Mikoshi::Plan::Service' do
       )
     end
 
-    it { expect { service.update_service }.to output("before update\n").to_stdout_from_any_process }
+    it do
+      expect { service.update_service }.
+        to output("before update\nafter update\n").to_stdout_from_any_process
+    end
   end
 
   context '#deploy_service' do
@@ -106,6 +112,22 @@ RSpec.describe 'Mikoshi::Plan::Service' do
       it 'should invoke update hooks' do
         allow(client).to receive(:wait_until).and_return(true)
         expect { service.deploy_service }.to output("before update\nafter update\n").to_stdout_from_any_process
+      end
+    end
+
+    context 'when a deployment fails' do
+      let(:client) do
+        Aws::ECS::Client.new(
+          stub_responses: {
+            describe_services: { services: [] },
+            create_service: StandardError,
+          },
+        )
+      end
+      it do
+        expect { service.deploy_service }.
+          to  raise_error(StandardError).
+          and output("before create\nfailed\n").to_stdout_from_any_process
       end
     end
   end

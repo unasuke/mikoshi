@@ -22,37 +22,32 @@ module Mikoshi
         invoke_before_create_hooks
 
         @client.create_service(@data[:service].except(:service))
+        wait_until_services_stable
+
+        invoke_after_create_hooks
       end
 
       def update_service
         invoke_before_update_hooks
 
         @client.update_service(@data[:service].except(:service_name, :placement_strategy, :placement_constraints))
+        wait_until_services_stable
+
+        invoke_after_update_hooks
       end
 
       def deploy_service(message: false)
+        @message = message
+
         case operation
         when :create
           create_service
         when :update
           update_service
         end
-
-        @client.wait_until(:services_stable, cluster: @data[:service][:cluster], services: [@data[:service][:service]]) do |w|
-          w.max_attempts = 30
-          w.delay        = 10
-
-          w.before_wait do
-            puts 'Waiting to change status of service...' if message
-          end
-        end
-
-        case operation
-        when :create
-          invoke_after_create_hooks
-        when :update
-          invoke_after_update_hooks
-        end
+      rescue => e
+        invoke_failed_hooks
+        raise e
       end
 
       private
@@ -72,12 +67,28 @@ module Mikoshi
         end
       end
 
+      def wait_until_services_stable
+        params = { cluster: @data[:service][:cluster], services: [@data[:service][:service]] }
+
+        @client.wait_until(:services_stable, params) do |w|
+          w.max_attempts = 30
+          w.delay        = 10
+
+          w.before_wait do
+            puts 'Waiting to change status of service...' if @message
+          end
+        end
+      end
+
       %w[before after].each do |step|
         %w[create update].each do |func|
           define_method "invoke_#{step}_#{func}_hooks" do
             invoke_hooks @data[:hooks]["#{step}_#{func}".to_sym] unless @data.dig(:hooks, "#{step}_#{func}".to_sym).nil?
           end
         end
+      end
+      def invoke_failed_hooks
+        invoke_hooks(@data[:hooks][:failed]) unless @data.dig(:hooks, :failed).nil?
       end
     end
   end
