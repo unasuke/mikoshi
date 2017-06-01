@@ -80,6 +80,9 @@ Waiting for 10 sec...
 Waiting for 10 sec...
 Update service success
 
+# if task definition and service are same name, you can use -g option
+$ mikoshi deploy -g ping2googledns
+
 # show help
 $ mikoshi help
 Commands:

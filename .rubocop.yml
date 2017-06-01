@@ -11,3 +11,6 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*_spec.rb'
     - 'mikoshi.gemspec'
+
+Metrics/CyclomaticComplexity:
+  Max: 8

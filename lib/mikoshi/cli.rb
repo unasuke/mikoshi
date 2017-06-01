@@ -41,9 +41,14 @@ module Mikoshi
     desc 'deploy', 'Deploy task definition and service'
     method_option :task_definition, type: :string, desc: 'task_definition name', aliases: '-t'
     method_option :service, type: :string, desc: 'service name', aliases: '-s'
+    method_option :group, type: :string, desc: 'service and task definition name(if both are same)', aliases: '-g'
+
     def deploy
-      update_task_definition(options[:task_definition]) unless options[:task_definition].nil?
-      update_service(options[:service]) unless options[:service].nil?
+      task_definition = options[:group] || options[:task_definition] || nil
+      service = options[:group] || options[:service] || nil
+
+      update_task_definition(task_definition) if task_definition
+      update_service(service) if service
     end
 
     no_tasks do
