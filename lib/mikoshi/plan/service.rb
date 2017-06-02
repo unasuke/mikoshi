@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-require 'active_support/core_ext/hash/except'
 require 'mikoshi/plan'
+require 'mikoshi/util/except_keys'
 
 module Mikoshi
   class Plan
     class Service < Base
       TASK_DEFINITION_WITH_REVISION = %r{\A\S+:\d+\z}
+      IGNORE_OPTIONS_WHEN_UPDATE =
+        %i[client_token load_balancers placement_constraints placement_strategy role service_name].freeze
 
       def initialize(yaml_path: nil, client: nil)
         super
@@ -30,7 +32,7 @@ module Mikoshi
       def update_service
         invoke_before_update_hooks
 
-        @client.update_service(@data[:service].except(:service_name, :placement_strategy, :placement_constraints))
+        @client.update_service(@data[:service].except_keys(IGNORE_OPTIONS_WHEN_UPDATE))
         wait_until_services_stable
 
         invoke_after_update_hooks

@@ -3,6 +3,11 @@ service:
   service: "ping2googledns"
   task_definition: <%= "ping2googledns:#{ENV['TASK_DEF_REVISION']}" %>
   desired_count: 0
+  role: "arn:aws:iam::123456789:role/someRole"
+  load_balancers:
+    - target_group_arn: "arn:aws:elasticloadbalancing:ap-northeast-1:123456789:targetgroup/ping2googledns/123456789abcdef"
+      container_name: "ping"
+      container_port: 80
   placement_strategy:
     - type: "spread"
       field: "attribute:ecs.availability-zone"
