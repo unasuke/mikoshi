@@ -108,7 +108,7 @@ module Mikoshi
     def update_task_definition(task_def_name)
       if task_def_name.nil?
         warn '--task-definition=TASK_DEFINITION is require option.'
-        exit(false)
+        abort
       end
 
       task = ::Mikoshi::Plan::TaskDefinition.new(
@@ -128,7 +128,7 @@ module Mikoshi
     def update_service(service_name)
       if service_name.nil?
         warn '--service=SERVICE is require option.'
-        exit(false)
+        abort
       end
 
       service = ::Mikoshi::Plan::Service.new(
