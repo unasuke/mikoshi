@@ -60,9 +60,9 @@ module Mikoshi
     end
 
     def exit_when_flag
-      usage && exit if @options[:config][:help]
-      version && exit if @options[:config][:version]
-      true
+      usage if @options[:config][:help]
+      version if @options[:config][:version]
+      exit if @options[:config][:help] || @options[:config][:version]
     end
 
     def usage
