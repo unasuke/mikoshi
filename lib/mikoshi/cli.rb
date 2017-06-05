@@ -145,8 +145,8 @@ module Mikoshi
       task_def_name = @options[:config][:group] || @options[:config][:task_definition]
       service_name = @options[:config][:group] || @options[:config][:service]
 
-      update_task_definition(task_def_name) if task_definition
-      update_service(service_name) if service
+      update_task_definition(task_def_name) if task_def_name
+      update_service(service_name) if service_name
     end
 
     def aws_client
