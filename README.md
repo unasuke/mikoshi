@@ -85,15 +85,37 @@ $ mikoshi deploy -g ping2googledns
 
 # show help
 $ mikoshi help
-Commands:
-  mikoshi deploy                       # Deploy task definition and service
-  mikoshi help [COMMAND]               # Describe available commands or one specific command
-  mikoshi update_service SERVICE_NAME  # Update service
-  mikoshi update_task TASK_NAME        # Update task definition
+Usage of the mikoshi
 
-Options:
-  [--region=REGION]  # aws region
+Global option
+  -r, --region=REGION : Set aws region
+  -h, --help          : Print this help message
+  -v, --version       : Print mikoshi version
 
+Subcommands
+  update_task_definition
+    Update task definition to given task definition yaml file.
+    Set TASK_DEF_REVISION to updated task definition revision number.
+
+    Option
+      --potdr
+        Acronym of the "Print Only Task Definition Revision".
+
+  update_service
+    Update service to given service yaml file.
+    Wait for success to update the service. (Maximum 300 min)
+
+  deploy
+    invoke update_task_definition and update_service.
+
+    Option
+      -g, --group=GROUP
+        If task definition file name and service file name are
+        same, that a shorthand of pass both.
+
+  Common options
+    -s, --service=SERVICE
+    -t, --task-definition=TASK_DEFINITION
 ```
 
 ## Development
