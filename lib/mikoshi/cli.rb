@@ -97,7 +97,7 @@ module Mikoshi
 
           Common options
             -s, --service=SERVICE
-            -t, --task_definition=TASK_DEFINITION
+            -t, --task-definition=TASK_DEFINITION
       USAGE
     end
 
