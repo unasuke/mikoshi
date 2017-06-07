@@ -32,9 +32,9 @@ module Mikoshi
 
       case @options[:command]
       when :update_task_definition
-        update_task_definition(@options[:config][:task_definition])
+        update_task_definition(@options[:config][:task_definition] || @argv[1])
       when :update_service
-        update_service(@options[:config][:service])
+        update_service(@options[:config][:service] || @argv[1])
       when :deploy
         deploy
       when :version
