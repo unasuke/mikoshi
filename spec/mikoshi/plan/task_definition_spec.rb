@@ -36,4 +36,26 @@ RSpec.describe 'Mikoshi::Plan::TaskDefinition' do
       end
     end
   end
+
+  describe '#runtask' do
+    let(:client) { Aws::ECS::Client.new(stub_responses: true) }
+    let(:task_def) do
+      Mikoshi::Plan::TaskDefinition.new(
+        yaml_path: 'spec/yaml/task_definitions/ping2googledns.yml.erb',
+        client: client,
+      )
+    end
+
+    context 'when cluster is empty' do
+      it 'should raise ArgumentError' do
+        expect { task_def.runtask }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'when cluster passed' do
+      it 'should success' do
+        expect(task_def.runtask(cluster: 'defailt')).to be
+      end
+    end
+  end
 end
