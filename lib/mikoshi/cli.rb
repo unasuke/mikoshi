@@ -35,6 +35,8 @@ module Mikoshi
         update_task_definition(@options[:config][:task_definition] || @argv[1])
       when :update_service
         update_service(@options[:config][:service] || @argv[1])
+      when :runtask
+        runtask(@options[:config][:task_definition] || @argv[1], @options[:config][:cluster])
       when :deploy
         deploy
       when :version
@@ -54,6 +56,7 @@ module Mikoshi
       opt.on('-g', '--group=GROUP')                     { |v| @options[:config][:group] = v }
       opt.on('-h', '--help')                            { |v| @options[:config][:help] = v }
       opt.on('-v', '--version')                         { |v| @options[:config][:version] = v }
+      opt.on('--cluster=CLUSTER')                       { |v| @options[:config][:cluster] = v }
 
       opt.permute!(@argv)
       @options[:command] = @argv.first.to_sym unless @argv.first.nil?
@@ -82,6 +85,13 @@ module Mikoshi
             Option
               --potdr
                 Acronym of the "Print Only Task Definition Revision".
+
+          runtask
+            Invoke new task using specified task definition.
+
+            Option
+              --cluster
+                Set cluster to run task. (required)
 
           update_service
             Update service to given service yaml file.
@@ -123,6 +133,22 @@ module Mikoshi
       task.register_task_definition
       puts "Done update task definition: #{task_def_name} revision: #{ENV['TASK_DEF_REVISION']}" unless potdr
       puts ENV['TASK_DEF_REVISION'] if potdr
+    end
+
+    def runtask(task_def_name, cluster)
+      if task_def_name.nil?
+        warn '--task-definition=TASK_DEFINITION is require option.'
+        abort
+      end
+
+      task = ::Mikoshi::Plan::TaskDefinition.new(
+        yaml_path: File.join(TASK_DEFINITION_PATH, task_def_name + PLAN_EXT),
+        client:    aws_client,
+      )
+
+      puts "Run task: #{task_def_name}"
+      task.runtask(cluster: cluster)
+      puts "Invoked task: #{task_def_name}"
     end
 
     def update_service(service_name)
