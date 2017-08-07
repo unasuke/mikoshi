@@ -101,6 +101,13 @@ Subcommands
       --potdr
         Acronym of the "Print Only Task Definition Revision".
 
+  runtask
+    Invoke new task using specified task definition.
+
+    Option
+      --cluster
+        Set cluster to run task. (required)
+
   update_service
     Update service to given service yaml file.
     Wait for success to update the service. (Maximum 300 min)
