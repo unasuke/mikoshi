@@ -26,7 +26,8 @@ module Mikoshi
       def runtask(cluster: nil)
         raise ArgumentError, 'cluster name is required.' if cluster.nil?
 
-        resp = @client.run_task(task_definition: @data[:task_definition][:family], cluster: cluster)
+        resp = @client.register_task_definition(@data[:task_definition])
+        @client.run_task(task_definition: resp[:task_definition][:task_definition_arn], cluster: cluster)
       end
 
       private
