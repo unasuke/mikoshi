@@ -16,4 +16,4 @@ Metrics/BlockLength:
     - 'mikoshi.gemspec'
 
 Metrics/CyclomaticComplexity:
-  Max: 8
+  Max: 10
