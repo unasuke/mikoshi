@@ -1,3 +1,6 @@
+AllCops:
+  TargetRubyVersion: 2.3
+
 inherit_gem:
   unasukecop:
     - "config/rubocop.yml"
@@ -13,4 +16,4 @@ Metrics/BlockLength:
     - 'mikoshi.gemspec'
 
 Metrics/CyclomaticComplexity:
-  Max: 8
+  Max: 10
