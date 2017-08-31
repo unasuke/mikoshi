@@ -3,7 +3,7 @@
 # rubocop: disable Metrics/AbcSize
 # rubocop: disable Metrics/ClassLength
 
-require 'aws-sdk'
+require 'aws-sdk-ecs'
 require 'mikoshi/plan'
 require 'mikoshi/plan/task_definition'
 require 'mikoshi/plan/service'
