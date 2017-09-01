@@ -14,12 +14,9 @@ RSpec.describe 'Mikoshi::Plan::TaskDefinition' do
     context 'when a registration succeeds' do
       let(:client) { Aws::ECS::Client.new(stub_responses: true) }
 
-      it do
+      it 'should export env TASK_DEF_REVISION and invoke hooks' do
         expect { task_def.register_task_definition }.
           to output("before register\nafter register\n").to_stdout_from_any_process
-      end
-      it "should export env 'TASK_DEF_REVISION'" do
-        task_def.register_task_definition
         expect(ENV['TASK_DEF_REVISION']).to eq '0' # default stub response
       end
     end
