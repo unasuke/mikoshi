@@ -47,7 +47,7 @@ module Mikoshi
         when :update
           update_service
         end
-      rescue => e
+      rescue StandardError => e
         invoke_failed_hooks
         raise e
       end

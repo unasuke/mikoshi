@@ -43,6 +43,8 @@ module Mikoshi
         version
       when :help
         usage
+      else
+        command_is_unkown(command: @options[:command])
       end
     end
 
@@ -173,6 +175,10 @@ module Mikoshi
 
       update_task_definition(task_def_name) if task_def_name
       update_service(service_name) if service_name
+    end
+
+    def command_is_unkown(command: nil)
+      warn "'#{command}' is unknown command. Please see help by `mikoshi help`."
     end
 
     def aws_client

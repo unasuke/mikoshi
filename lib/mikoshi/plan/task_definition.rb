@@ -18,7 +18,7 @@ module Mikoshi
         invoke_after_register_hooks
 
         resp
-      rescue => e
+      rescue StandardError => e
         invoke_failed_hooks
         raise e
       end
