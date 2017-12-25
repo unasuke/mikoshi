@@ -192,3 +192,5 @@ module Mikoshi
     end
   end
 end
+
+# rubocop: enable all
