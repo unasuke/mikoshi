@@ -5,6 +5,7 @@ language: ruby
 rvm:
   - 2.3.4
   - 2.4.1
+  - 2.5.0
   - ruby-head
 before_install: gem install bundler
 script:
